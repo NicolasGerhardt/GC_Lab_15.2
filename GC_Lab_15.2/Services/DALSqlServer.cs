@@ -19,6 +19,37 @@ namespace GC_Lab_15._2.Services
             connectionString = config.GetConnectionString("MovieAPIDB");
         }
 
+        public string[] GetMovieCategories()
+        {
+
+            SqlConnection connection = null;
+            string queryString = "SELECT DISTINCT Category FROM Movies";
+            string[] categories = null;
+
+            try
+            {
+                connection = new SqlConnection(connectionString);
+                categories = connection.Query<string>(queryString).ToArray();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if (connection != null)
+                {
+                    
+                    connection.Close(); //explicitly closing the connection
+                }
+            }
+
+            
+
+            return categories;
+
+        }
 
         public IEnumerable<Movie> GetMoviesAll()
         {
@@ -35,7 +66,7 @@ namespace GC_Lab_15._2.Services
             {
                 Console.WriteLine(e.Message);
             }
-            finally //cleanup!
+            finally
             {
                 if (connection != null)
                 {

@@ -22,14 +22,25 @@ namespace GC_Lab_15._2.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Movie> Get(string? category)
+        public Object Get(string? category)
         {
+            IEnumerable<Movie> movieList = null;
+
             if (string.IsNullOrEmpty(category))
             {
-                return dal.GetMoviesAll();
+                movieList = dal.GetMoviesAll();
+            } 
+            else
+            {
+                movieList = dal.GetMoviesByCategory(category);
             }
 
-            return dal.GetMoviesByCategory(category);
+            if (movieList is null)
+            {
+                return new { success = false };
+            }
+
+            return new { success = true, movieList };
 
         }
 

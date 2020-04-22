@@ -11,7 +11,7 @@ namespace GC_Lab_15._2.Services
         //int CreateMovie(Movie prod);
         //int DeleteMovieById(int id);
         //Movie GetMovieById(int id);
-        //string[] GetAllCategories();
+        string[] GetMovieCategories();
         public IEnumerable<Movie> GetMoviesAll();
         public IEnumerable<Movie> GetMoviesByCategory(string category);
     }
