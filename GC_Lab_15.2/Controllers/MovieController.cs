@@ -45,7 +45,7 @@ namespace GC_Lab_15._2.Controllers
         }
 
         [HttpGet("random")]
-        public Movie GetRandom(string? category)
+        public Object GetRandom(string? category)
         {
             Random r = new Random();
             Movie[] movies = null;
@@ -60,13 +60,49 @@ namespace GC_Lab_15._2.Controllers
             }
 
 
+            if (movies is null)
+            {
+                return new { success = false };
+            }
+
 
             Movie randomMovie = movies[r.Next(movies.Length)];
-            return randomMovie;
+            return new { success = true, randomMovie };
 
         }
 
+        [HttpGet("pick/{id}")]
+        public Object GetPicks(int id, string? category)
+        {
+            int numOfMoviesToPick = id;
+            Random r = new Random();
+            List<Movie> movieList = null;
 
+            if (string.IsNullOrEmpty(category))
+            {
+                movieList = dal.GetMoviesAll().ToList();
+            }
+            else
+            {
+                movieList = dal.GetMoviesByCategory(category).ToList();
+            }
+
+            if (movieList is null || movieList.Count == 0)
+            {
+                return new { success = false };
+            }
+
+            List<Movie> moviePicks = new List<Movie>();
+
+            for (int i = 0; i < id && movieList.Count > 0; i++)
+            {
+                int randomIndex = r.Next(movieList.Count);
+                moviePicks.Add(movieList[randomIndex]);
+                movieList.RemoveAt(randomIndex);
+            }
+
+            return new { success = true, moviePicks };
+        }
 
     }
 }
